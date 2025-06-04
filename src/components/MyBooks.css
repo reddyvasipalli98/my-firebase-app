@@ -318,4 +318,34 @@
     .submit-button {
         width: 100%;
     }
+}
+
+.mybooks-container.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 20px;
+}
+
+.mybooks-container.loading p {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin: 0;
+}
+
+.no-books-message {
+    text-align: center;
+    padding: 40px;
+    background: var(--bg-primary);
+    border-radius: 16px;
+    border: 2px dashed var(--border-color);
+}
+
+.no-books-message p {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin: 0;
+    line-height: 1.6;
 } 

@@ -1,25 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { auth } from '../firebase.config';
 import LoadingSpinner from './LoadingSpinner';
 import './MyBooks.css';
 
-const MyBooks = () => {
-    const [books, setBooks] = useState([
-        {
-            id: 1,
-            title: "The Midnight Library",
-            author: "Matt Haig",
-            comments: "A beautiful reflection on life's infinite possibilities.",
-            date: "2024-03-15"
-        },
-        {
-            id: 2,
-            title: "Atomic Habits",
-            author: "James Clear",
-            comments: "Transformative insights on building better habits.",
-            date: "2024-03-10"
-        }
-    ]);
+const API_URL = 'http://localhost:5000/api';
 
+const MyBooks = () => {
+    const [books, setBooks] = useState([]);
     const [newBook, setNewBook] = useState({
         title: '',
         author: '',
@@ -27,8 +14,32 @@ const MyBooks = () => {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [validationErrors, setValidationErrors] = useState({});
+
+    useEffect(() => {
+        fetchBooks();
+    }, []);
+
+    const fetchBooks = async () => {
+        try {
+            const userId = auth.currentUser.uid;
+            const response = await fetch(`${API_URL}/books/${userId}`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch books');
+            }
+
+            const data = await response.json();
+            setBooks(data);
+        } catch (err) {
+            setError('Failed to load books. Please try again later.');
+            console.error('Error fetching books:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const validateForm = () => {
         const errors = {};
@@ -58,7 +69,6 @@ const MyBooks = () => {
             ...prev,
             [name]: value
         }));
-        // Clear validation error when user starts typing
         if (validationErrors[name]) {
             setValidationErrors(prev => ({
                 ...prev,
@@ -76,17 +86,18 @@ const MyBooks = () => {
         }
 
         const newBookData = {
-            id: Date.now(), // Temporary ID for optimistic update
             ...newBook,
-            date: new Date().toISOString().split('T')[0]
+            date: new Date().toISOString().split('T')[0],
+            userId: auth.currentUser.uid
         };
 
         // Optimistic update
-        setBooks(prev => [...prev, newBookData]);
+        const optimisticId = Date.now();
+        setBooks(prev => [...prev, { ...newBookData, id: optimisticId }]);
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('/saveBookData', {
+            const response = await fetch(`${API_URL}/books`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +114,7 @@ const MyBooks = () => {
 
             // Update with actual server data
             setBooks(prev => prev.map(book => 
-                book.id === newBookData.id ? savedBook : book
+                book.id === optimisticId ? savedBook : book
             ));
 
             setNewBook({
@@ -113,7 +124,7 @@ const MyBooks = () => {
             });
         } catch (err) {
             // Revert optimistic update
-            setBooks(prev => prev.filter(book => book.id !== newBookData.id));
+            setBooks(prev => prev.filter(book => book.id !== optimisticId));
             setError(err.message || 'Failed to save book. Please try again.');
             console.error('Error saving book:', err);
         } finally {
@@ -121,21 +132,36 @@ const MyBooks = () => {
         }
     };
 
+    if (isLoading) {
+        return (
+            <div className="mybooks-container loading">
+                <LoadingSpinner />
+                <p>Loading your books...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="mybooks-container">
             <section className="reading-list-section">
                 <h1>My Reading Journey</h1>
                 <div className="books-list">
-                    {books.map(book => (
-                        <div key={book.id} className={`book-entry ${book.id === Date.now() ? 'optimistic' : ''}`}>
-                            <div className="book-entry-header">
-                                <h3>{book.title}</h3>
-                                <span className="book-date">{book.date}</span>
-                            </div>
-                            <p className="book-author">by {book.author}</p>
-                            <p className="book-comments">{book.comments}</p>
+                    {books.length === 0 ? (
+                        <div className="no-books-message">
+                            <p>You haven't added any books yet. Start your reading journey today!</p>
                         </div>
-                    ))}
+                    ) : (
+                        books.map(book => (
+                            <div key={book.id} className={`book-entry ${book.id === Date.now() ? 'optimistic' : ''}`}>
+                                <div className="book-entry-header">
+                                    <h3>{book.title}</h3>
+                                    <span className="book-date">{book.date}</span>
+                                </div>
+                                <p className="book-author">by {book.author}</p>
+                                <p className="book-comments">{book.comments}</p>
+                            </div>
+                        ))
+                    )}
                 </div>
             </section>
 

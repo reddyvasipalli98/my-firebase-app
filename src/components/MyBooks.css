@@ -1,0 +1,235 @@
+.mybooks-container {
+    padding: 40px;
+    min-height: 100vh;
+    background: var(--bg-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.reading-list-section {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+}
+
+.reading-list-section h1 {
+    color: var(--text-primary);
+    font-size: 32px;
+    margin-bottom: 32px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+}
+
+.reading-list-section h1::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--accent-primary);
+    border-radius: 2px;
+}
+
+.books-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 8px 4px;
+}
+
+.book-entry {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.book-entry::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--accent-primary);
+    border-radius: 2px;
+}
+
+.book-entry:hover {
+    transform: translateY(-2px) translateX(2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    border-color: var(--accent-primary-alpha);
+}
+
+.book-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.book-entry-header h3 {
+    color: var(--text-primary);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.book-date {
+    color: var(--text-secondary);
+    font-size: 14px;
+    background: var(--accent-primary-alpha);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.book-author {
+    color: var(--accent-primary);
+    font-size: 16px;
+    margin: 12px 0;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.book-author::before {
+    content: '✍️';
+    font-size: 14px;
+}
+
+.book-comments {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 12px 0 0;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    position: relative;
+}
+
+.book-comments::before {
+    content: '"';
+    position: absolute;
+    top: -5px;
+    left: 12px;
+    font-size: 40px;
+    color: var(--accent-primary);
+    opacity: 0.2;
+}
+
+.add-book-section {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+}
+
+.add-book-section h2 {
+    color: var(--text-primary);
+    font-size: 24px;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+.add-book-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px var(--accent-primary-alpha);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-button {
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    align-self: flex-start;
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .mybooks-container {
+        padding: 20px;
+        gap: 24px;
+    }
+
+    .reading-list-section,
+    .add-book-section {
+        padding: 24px;
+    }
+
+    .reading-list-section h1 {
+        font-size: 28px;
+    }
+
+    .book-entry {
+        padding: 20px;
+    }
+
+    .book-entry-header h3 {
+        font-size: 18px;
+    }
+
+    .submit-button {
+        width: 100%;
+    }
+} 

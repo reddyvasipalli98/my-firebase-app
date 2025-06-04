@@ -1,0 +1,91 @@
+.vertical-navbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    background: var(--nav-bg);
+    width: 240px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding-top: 80px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 16px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    position: relative;
+    color: var(--text-secondary);
+}
+
+.nav-item:hover {
+    background: var(--hover-bg);
+    color: var(--accent-primary);
+}
+
+.nav-item.active {
+    background: var(--active-bg);
+    color: var(--accent-primary);
+    font-weight: 500;
+}
+
+.nav-icon {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+}
+
+.nav-label {
+    font-size: 15px;
+}
+
+.active-indicator {
+    position: absolute;
+    left: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: var(--accent-primary);
+    border-radius: 0 4px 4px 0;
+}
+
+.theme-toggle {
+    margin-top: auto;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+    .vertical-navbar {
+        width: 80px;
+    }
+
+    .nav-label {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .nav-icon {
+        margin: 0;
+    }
+} 
